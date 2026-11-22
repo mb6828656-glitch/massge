@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<title>Love Letter</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Envelope */
+.envelope {
+    position: relative;
+    width: min(430px, 88vw);
+    height: min(280px, 58vw);
+    min-height: 180px;
+    background: #f5eeee;
+    border-radius: 10px;
+    cursor: pointer;
+    filter: drop-shadow(0 0 20px rgba(255,255,255,0.15));
+    transition: transform 0.4s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.envelope:hover {
+    transform: scale(1.03);
+}
+
+/* Back */
+.back {
+    position: absolute;
+    inset: 0;
+    background: #e8dada;
+    border-radius: 10px;
+    z-index: 1;
+}
+
+/* Letter */
+.letter {
+    position: absolute;
+    top: 10%;
+    left: 7%;
+    width: 86%;
+    height: 80%;
+    background: #fff;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
+}
+
+.letter p {
+    color: #b51d35;
+    font-size: clamp(18px, 5vw, 28px);
+    text-align: center;
+    font-weight: bold;
+    line-height: 1.6;
+}
+
+/* Front */
+.front {
+    position: absolute;
+    inset: 0;
+    background: #f3e5e5;
+    clip-path: polygon(
+        0 0,
+        50% 55%,
+        100% 0,
+        100% 100%,
+        0 100%
+    );
+    border-radius: 10px;
+    z-index: 3;
+}
+
+/* Flap */
+.flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    background: #e8cccc;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top;
+    transition: transform 0.8s ease;
+    z-index: 4;
+}
+
+/* Open */
+.envelope.open .flap {
+    transform: rotateX(180deg);
+    z-index: 2;
+}
+
+.envelope.open .letter {
+    opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .envelope {
+        width: 88vw;
+        height: 58vw;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="envelope" id="envelope"
+         role="button" tabindex="0"
+         aria-label="افتح الرسالة">
+
+        <div class="back"></div>
+
+        <div class="letter">
+            <p id="message"></p>
+        </div>
+
+        <div class="front"></div>
+
+        <div class="flap"></div>
+
+    </div>
+
+</div>
+
+<script>
+const envelope = document.getElementById("envelope");
+const message = document.getElementById("message");
+
+const loveText = "    روح  ذاكر ي بطيييييييييييييييييييييييييييييييييييخه ";
+
+let isOpen = false;
+let timer;
+let index = 0;
+
+function toggleEnvelope() {
+
+    clearTimeout(timer);
+
+    isOpen = !isOpen;
+
+    if (isOpen) {
+
+        envelope.classList.add("open");
+
+        message.textContent = "";
+        index = 0;
+
+        setTimeout(() => {
+            typeText();
+        }, 800);
+
+    } else {
+
+        envelope.classList.remove("open");
+        message.textContent = "";
+
+    }
+}
+
+function typeText() {
+
+    if (index < loveText.length && isOpen) {
+
+        message.textContent += loveText[index];
+
+        index++;
+
+        timer = setTimeout(typeText, 150);
+    }
+}
+
+envelope.addEventListener("click", toggleEnvelope);
+
+envelope.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter" || event.key === " ") {
+
+        event.preventDefault();
+        toggleEnvelope();
+
+    }
+});
+</script>
+
+</body>
+</html>
